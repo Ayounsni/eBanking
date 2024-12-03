@@ -21,12 +21,14 @@ public class AppUserController {
 
     @PostMapping("/register")
     public ResponseEntity<ResponseAppUserDTO> createAppUser(@Valid @RequestBody CreateAppUserDTO createAppUserDTO) {
-        try {
-            ResponseAppUserDTO appUser = appUserService.create(createAppUserDTO);
-            return new ResponseEntity<>(appUser, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        ResponseAppUserDTO appUser = appUserService.create(createAppUserDTO);
+        return new ResponseEntity<>(appUser, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseAppUserDTO> getAppUserById( @PathVariable("id") Long id) {
+        ResponseAppUserDTO champ = appUserService.getById(id);
+        return new ResponseEntity<>(champ, HttpStatus.OK);
     }
 }
 

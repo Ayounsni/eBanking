@@ -27,4 +27,11 @@ public class AppUserService implements IAppUserService {
         user.setPassword(passwordEncoder.encode(createAppUserDTO.getPassword()));
         return appUserMapper.toDTO(appUserRepository.save(user)) ;
     }
+
+    @Override
+    public ResponseAppUserDTO getById(Long id) {
+        AppUser user = appUserRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("User not found"));
+        return appUserMapper.toDTO(user);
+    }
 }

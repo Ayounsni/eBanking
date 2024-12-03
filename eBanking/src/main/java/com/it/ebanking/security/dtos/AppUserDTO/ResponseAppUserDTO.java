@@ -1,5 +1,6 @@
 package com.it.ebanking.security.dtos.AppUserDTO;
 
+import com.it.ebanking.security.dtos.AppRoleDTO.EmbeddableAppRoleDTO;
 import com.it.ebanking.security.entities.AppRole;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
@@ -18,5 +19,5 @@ public class ResponseAppUserDTO {
 
     private String password;
 
-    private AppRole role;
+    private EmbeddableAppRoleDTO role;
 }

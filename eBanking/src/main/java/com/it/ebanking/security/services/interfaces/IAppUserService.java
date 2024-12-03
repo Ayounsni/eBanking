@@ -5,6 +5,7 @@ import com.it.ebanking.security.dtos.AppUserDTO.ResponseAppUserDTO;
 import com.it.ebanking.security.entities.AppUser;
 
 public interface IAppUserService {
-    public ResponseAppUserDTO create(CreateAppUserDTO user);
+    ResponseAppUserDTO create(CreateAppUserDTO user);
+    ResponseAppUserDTO getById(Long id);
 
 }
