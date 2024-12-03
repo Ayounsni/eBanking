@@ -21,6 +21,9 @@ public class SecurityConfig {
     @Autowired
     UserDetailsService userDetailsService;
 
+    @Autowired
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -30,11 +33,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(basic -> basic.authenticationEntryPoint(customAuthenticationEntryPoint))
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/register").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .httpBasic(withDefaults());
+                        .requestMatchers("/api/register").permitAll() // Permet les requêtes publiques à /api/register
+                        .anyRequest().authenticated() // Authentifie toutes les autres requêtes
+                );
 
         return http.build();
     }
