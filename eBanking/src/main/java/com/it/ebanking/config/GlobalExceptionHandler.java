@@ -71,7 +71,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorDTO(message, HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }
 
-    // Gérer les erreurs d'authentification (401 Unauthorized)
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorDTO> handleAuthenticationException(AuthenticationException ex) {
         String message = "Erreur d'authentification : " + ex.getMessage();

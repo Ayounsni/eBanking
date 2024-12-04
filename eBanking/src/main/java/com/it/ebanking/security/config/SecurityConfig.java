@@ -20,7 +20,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
 public class SecurityConfig {
     @Autowired
     UserDetailsService userDetailsService;
@@ -44,9 +43,12 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/register").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/user/**").hasRole("USER")
                         .anyRequest().authenticated())
-                .exceptionHandling(customizer -> customizer.accessDeniedHandler(customAccessDeniedHandler));
-
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                .accessDeniedHandler(customAccessDeniedHandler)
+        );
         return http.build();
     }
 

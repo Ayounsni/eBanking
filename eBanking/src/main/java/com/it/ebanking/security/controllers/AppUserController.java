@@ -26,8 +26,7 @@ public class AppUserController {
         return new ResponseEntity<>(appUser, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/admin/{id}")
     public ResponseEntity<ResponseAppUserDTO> getAppUserById( @PathVariable("id") Long id) {
         ResponseAppUserDTO champ = appUserService.getById(id);
         return new ResponseEntity<>(champ, HttpStatus.OK);
