@@ -1,4 +1,4 @@
-package com.it.ebanking.security.config;
+package com.it.ebanking.security.exeptions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

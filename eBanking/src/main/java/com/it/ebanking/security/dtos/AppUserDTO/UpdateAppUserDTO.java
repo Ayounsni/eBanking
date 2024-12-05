@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateAppUserDTO {
 
-    private AppRole roleId;
+    private Long roleId;
 
 }
