@@ -4,6 +4,7 @@ package com.it.ebanking.security.controllers;
 import com.it.ebanking.security.dtos.AppUserDTO.CreateAppUserDTO;
 import com.it.ebanking.security.dtos.AppUserDTO.ResponseAppUserDTO;
 import com.it.ebanking.security.dtos.AppUserDTO.UpdateAppUserDTO;
+import com.it.ebanking.security.dtos.PasswordDTO.ChangePasswordDTO;
 import com.it.ebanking.security.services.interfaces.IAppUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class AppUserController {
 
 
     @GetMapping("/admin/users/{username}")
-    public ResponseEntity<ResponseAppUserDTO> getAppUserById( @PathVariable("username") String username) {
+    public ResponseEntity<ResponseAppUserDTO> getAppUserByUsername( @PathVariable("username") String username) {
         ResponseAppUserDTO user = appUserService.getByUsername(username);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -84,6 +85,12 @@ public class AppUserController {
 
         ResponseAppUserDTO updatedAppUser = appUserService.updateUser(username, updateAppUserDTO);
         return new ResponseEntity<>(updatedAppUser, HttpStatus.OK);
+    }
+
+    @PostMapping("/updatePassword")
+    public ResponseEntity<String> updatePassword(@Valid @RequestBody ChangePasswordDTO changePasswordDTO) {
+        appUserService.changePassword(changePasswordDTO);
+        return new ResponseEntity<>("Mot de passe changé avec succès.", HttpStatus.OK);
     }
 }
 

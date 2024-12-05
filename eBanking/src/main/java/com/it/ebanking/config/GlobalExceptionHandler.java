@@ -7,6 +7,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
@@ -71,17 +72,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorDTO(message, HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ErrorDTO> handleAuthenticationException(AuthenticationException ex) {
-        String message = "Erreur d'authentification : " + ex.getMessage();
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorDTO> handleBadCredentialsException(BadCredentialsException ex) {
+        String message = "Erreur : " + ex.getMessage();
         return new ResponseEntity<>(new ErrorDTO(message, HttpStatus.UNAUTHORIZED.value()), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
-    public ResponseEntity<ErrorDTO> handleAuthenticationCredentialsNotFoundException(AuthenticationCredentialsNotFoundException ex) {
-        String message = "Crédentials d'authentification non trouvés : " + ex.getMessage();
-        return new ResponseEntity<>(new ErrorDTO(message, HttpStatus.UNAUTHORIZED.value()), HttpStatus.UNAUTHORIZED);
-    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDTO> handleGeneralException(Exception ex) {

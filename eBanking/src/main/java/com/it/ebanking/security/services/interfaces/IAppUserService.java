@@ -3,6 +3,7 @@ package com.it.ebanking.security.services.interfaces;
 import com.it.ebanking.security.dtos.AppUserDTO.CreateAppUserDTO;
 import com.it.ebanking.security.dtos.AppUserDTO.ResponseAppUserDTO;
 import com.it.ebanking.security.dtos.AppUserDTO.UpdateAppUserDTO;
+import com.it.ebanking.security.dtos.PasswordDTO.ChangePasswordDTO;
 
 import java.util.List;
 
@@ -12,5 +13,6 @@ public interface IAppUserService {
     List<ResponseAppUserDTO> getAllUsers();
     void deleteUser(String username);
     ResponseAppUserDTO updateUser(String username , UpdateAppUserDTO updateAppUserDTO);
+    void changePassword(ChangePasswordDTO changePasswordDTO);
 
 }
