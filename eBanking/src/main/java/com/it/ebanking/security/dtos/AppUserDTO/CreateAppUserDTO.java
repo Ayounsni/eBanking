@@ -16,7 +16,6 @@ public class CreateAppUserDTO {
     private String username;
 
     @NotBlank
-    @Min(8)
     private String password;
 
     private Long roleId =1L;

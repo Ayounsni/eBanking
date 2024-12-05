@@ -1,5 +1,6 @@
 package com.it.ebanking.security.services.implementations;
 
+import com.it.ebanking.exeptions.UsernameAlreadyExistsException;
 import com.it.ebanking.security.dtos.AppUserDTO.CreateAppUserDTO;
 import com.it.ebanking.security.dtos.AppUserDTO.ResponseAppUserDTO;
 import com.it.ebanking.security.dtos.AppUserDTO.UpdateAppUserDTO;
@@ -17,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +31,16 @@ public class AppUserService implements IAppUserService {
     public final AppUserRepository appUserRepository;
     public final AppRoleRepository appRoleRepository;
     public final AppUserMapper appUserMapper;
-    public final BCryptPasswordEncoder passwordEncoder;
+    public final PasswordEncoder passwordEncoder;
+    public final HaveIBeenPwnedService haveIBeenPwnedService;
 
     @Override
     public ResponseAppUserDTO create(CreateAppUserDTO createAppUserDTO) {
         if (appUserRepository.findByUsername(createAppUserDTO.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Ce nom d'utilisateur existe déjà.");
+            throw new UsernameAlreadyExistsException("Ce nom d'utilisateur existe déjà.");
+        }
+        if (haveIBeenPwnedService.isPasswordPwned(createAppUserDTO.getPassword())) {
+            throw new IllegalArgumentException("Le mot de passe est compromis. Veuillez en choisir un autre.");
         }
         AppUser user = appUserMapper.toEntity(createAppUserDTO);
         user.setPassword(passwordEncoder.encode(createAppUserDTO.getPassword()));
@@ -90,6 +96,9 @@ public class AppUserService implements IAppUserService {
 
     @Override
     public void changePassword(ChangePasswordDTO changePasswordDTO) {
+        if(changePasswordDTO.getOldPassword().equals(changePasswordDTO.getNewPassword())) {
+            throw new BadCredentialsException("Le nouveau mot de passe ne peut pas être identique à l'ancien mot de passe.");
+        }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userAuth = authentication.getName();
         AppUser user = appUserRepository.findByUsername(userAuth)
